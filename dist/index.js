@@ -29421,7 +29421,7 @@ var RiskThresholdOptions;
      */
     RiskThresholdOptions["CRITICAL"] = "CRITICAL";
 })(RiskThresholdOptions = exports.RiskThresholdOptions || (exports.RiskThresholdOptions = {}));
-exports.binaryVersion = '1.4.1';
+exports.binaryVersion = '1.4.2';
 
 
 /***/ }),
@@ -29474,7 +29474,10 @@ function run() {
             core.exportVariable('APPKNOX_ACCESS_TOKEN', inputs.appknoxAccessToken);
             yield (0, tool_1.whoami)();
             const fileID = yield (0, tool_1.upload)(inputs.filePath);
-            yield (0, tool_1.analyses)(fileID, inputs.sarif);
+            const sarif = inputs.sarif;
+            if (sarif == 'true') {
+                yield (0, tool_1.sarifReport)(fileID);
+            }
             yield (0, tool_1.cicheck)(inputs.riskThreshold, fileID);
         }
         catch (err) {
@@ -29532,7 +29535,7 @@ function getInputs() {
         required: true
     });
     const path = core.getInput(constants_1.Inputs.Path, { required: true });
-    const sarifBool = core.getInput(constants_1.Inputs.sarif, { required: false });
+    const sarifBool = core.getInput(constants_1.Inputs.sarif, { required: true });
     const riskThresholdInput = core.getInput(constants_1.Inputs.RiskThreshold) || constants_1.RiskThresholdOptions.LOW;
     const riskThreshold = constants_1.RiskThresholdOptions[riskThresholdInput];
     if (!riskThreshold) {
@@ -29592,7 +29595,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.analyses = exports.cicheck = exports.upload = exports.whoami = void 0;
+exports.sarifReport = exports.cicheck = exports.upload = exports.whoami = void 0;
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const tc = __importStar(__nccwpck_require__(7784));
@@ -29706,11 +29709,14 @@ function cicheck(riskThreshold, fileID) {
     });
 }
 exports.cicheck = cicheck;
-function analyses(fileID, sarif //added sarif enable option
-) {
+function sarifReport(fileID) {
     return __awaiter(this, void 0, void 0, function* () {
         const toolPath = yield getAppknoxToolPath();
-        const args = ['analyses', fileID.toString(), 'sarif', sarif];
+        const args = [
+            'sarif',
+            fileID.toString(),
+            '--output report.sarif'
+        ];
         const combinedOutput = yield execBinary(toolPath, args);
         if (combinedOutput.code > 0) {
             const errArr = combinedOutput.err.split('\n').filter(_ => _);
@@ -29722,7 +29728,7 @@ function analyses(fileID, sarif //added sarif enable option
         return combinedOutput;
     });
 }
-exports.analyses = analyses;
+exports.sarifReport = sarifReport;
 
 
 /***/ }),

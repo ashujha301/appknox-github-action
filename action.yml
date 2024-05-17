@@ -12,6 +12,10 @@ inputs:
     description: 'Minimum risk. Valid options are LOW, MEDIUM, HIGH, CRITICAL. Defaults to "LOW"'
     required: true
     default: 'LOW'
+  sarif:
+    description: 'Enable SARIF format report. Defaults to false'
+    required: true
+    default: 'false'
 branding:
   icon: 'shield'
   color: 'blue'

@@ -123,12 +123,15 @@ export async function cicheck(
   }
 }
 
-export async function analyses(
-  fileID: number,
-  sarif: string //added sarif enable option
+export async function sarifReport(
+  fileID: number
 ): Promise<ExecOutput> {
   const toolPath = await getAppknoxToolPath();
-  const args = ['analyses', fileID.toString(), '--sarif', sarif];
+  const args = [
+    'sarif',
+    fileID.toString(),
+    '--output report.sarif'
+  ];
   const combinedOutput = await execBinary(toolPath, args);
   if (combinedOutput.code > 0) {
     const errArr = combinedOutput.err.split('\n').filter(_ => _);
