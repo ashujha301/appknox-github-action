@@ -15,4 +15,9 @@ export interface AppknoxInputs {
    * Minimum risk to fail CI
    */
   riskThreshold: RiskThresholdOptions;
+
+  /**
+   * Enable SARIF format
+   */
+  sarif: string;
 }

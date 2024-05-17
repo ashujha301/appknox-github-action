@@ -1,6 +1,6 @@
 {
   "name": "appknox-github-action",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Appknox Gtihub Action",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.7",
     "@typescript-eslint/parser": "^4.8.0",
-    "@zeit/ncc": "^0.22.3",
+    "@vercel/ncc": "^0.38.1",
     "concurrently": "^5.3.0",
     "eslint": "^7.13.0",
     "eslint-plugin-github": "^4.1.1",

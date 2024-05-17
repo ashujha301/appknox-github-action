@@ -10,6 +10,7 @@ export function getInputs(): AppknoxInputs {
     required: true
   });
   const path = core.getInput(Inputs.Path, {required: true});
+  const sarifBool = core.getInput(Inputs.sarif, {required: false});
 
   const riskThresholdInput =
     core.getInput(Inputs.RiskThreshold) || RiskThresholdOptions.LOW;
@@ -29,7 +30,8 @@ export function getInputs(): AppknoxInputs {
   const inputs = {
     appknoxAccessToken: accessToken,
     filePath: path,
-    riskThreshold: riskThreshold
+    riskThreshold: riskThreshold,
+    sarif: sarifBool
   } as AppknoxInputs;
   return inputs;
 }

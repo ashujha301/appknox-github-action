@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import * as tc from '@actions/tool-cache';
 import * as exec from '@actions/exec';
-import {binaryVersion, RiskThresholdOptions} from './constants';
+import { binaryVersion, RiskThresholdOptions } from './constants';
 
 interface AppknoxBinaryConfig {
   name: string;
@@ -31,7 +31,7 @@ function getAppknoxDownloadURL(os: string): string {
     throw Error(`Unsupported os ${os}`);
   }
   const binaryName = supportedOS[os].name;
-  return `https://github.com/appknox/appknox-go/releases/download/${binaryVersion}/${binaryName}`;
+  return `https://github.com/ashujha301/appknox-go/releases/download/${binaryVersion}/${binaryName}`;
 }
 
 async function downloadAppknoxCLI(platform: NodeJS.Platform) {
@@ -104,14 +104,14 @@ export async function upload(file_path: string): Promise<number> {
 
 export async function cicheck(
   riskThreshold: RiskThresholdOptions,
-  fileID: number
+  fileID: number,
 ): Promise<void> {
   const toolPath = await getAppknoxToolPath();
   const args = [
     'cicheck',
     fileID.toString(),
     '--risk-threshold',
-    riskThreshold
+    riskThreshold,
   ];
   const combinedOutput = await execBinary(toolPath, args);
   if (combinedOutput.code > 0) {
@@ -121,4 +121,22 @@ export async function cicheck(
     const outMes = outArr[outArr.length - 1];
     throw new Error(errMes + '. ' + outMes);
   }
+}
+
+export async function analyses(
+  fileID: number,
+  sarif: string //added sarif enable option
+): Promise<ExecOutput> {
+  const toolPath = await getAppknoxToolPath();
+  const args = ['analyses', fileID.toString(), '--sarif', sarif];
+  const combinedOutput = await execBinary(toolPath, args);
+  if (combinedOutput.code > 0) {
+    const errArr = combinedOutput.err.split('\n').filter(_ => _);
+    const outArr = combinedOutput.output.split('\n').filter(_ => _);
+    const errMes = errArr[errArr.length - 1];
+    const outMes = outArr[outArr.length - 1];
+    throw new Error(errMes + '. ' + outMes);
+  }
+
+  return combinedOutput;
 }

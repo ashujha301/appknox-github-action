@@ -1,7 +1,8 @@
 export enum Inputs {
   AppknoxAccessToken = 'appknox_access_token',
   Path = 'file_path',
-  RiskThreshold = 'risk_threshold'
+  RiskThreshold = 'risk_threshold',
+  sarif = 'sarif',
 }
 
 export enum RiskThresholdOptions {
@@ -26,4 +27,4 @@ export enum RiskThresholdOptions {
   CRITICAL = 'CRITICAL'
 }
 
-export const binaryVersion = '1.2.0';
+export const binaryVersion = '1.4.1';
