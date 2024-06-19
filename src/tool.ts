@@ -118,7 +118,6 @@ export async function sarifReport(
     const outMes = outArr[outArr.length - 1];
     throw new Error(errMes + '. ' + outMes);
   }
-
   return combinedOutput;
 }
 
